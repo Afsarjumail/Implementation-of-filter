@@ -1,101 +1,191 @@
-# Implementation-of-Erosion-and-Dilation
-## Aim
-To implement Erosion and Dilation using Python and OpenCV.
-## Software Required
-1. Anaconda - Python 3.7
-2. OpenCV
+# Implementation-of-filter
+## Aim:
+To implement filters for smoothing and sharpening the images in the spatial domain.
+
+## Software Required:
+Anaconda - Python 3.7
+
 ## Algorithm:
-### Step1:
-Import necessary packages
+### Step1
+Import necessary libraries: OpenCV, NumPy, and Matplotlib.Read an image, convert it to RGB format, define an 11x11 averaging kernel, and apply 2D convolution filtering.Display the original and filtered images side by side using Matplotlib.
 
-### Step2:
-Create an empty window and add text to it
+### Step2
+Define a weighted averaging kernel (kernel2) and apply 2D convolution filtering to the RGB image (image2).Display the resulting filtered image (image4) titled 'Weighted Averaging Filtered' using Matplotlib's imshow function.
 
-### Step3:
-create a structuring element
+### Step3
+Apply Gaussian blur with a kernel size of 11x11 and standard deviation of 0 to the RGB image (image2).Display the resulting Gaussian-blurred image (gaussian_blur) titled 'Gaussian Blurring Filtered' using Matplotlib's imshow function.
 
-### Step4:
-Do the operation
+### Step4
+Apply median blur with a kernel size of 11x11 to the RGB image (image2).Display the resulting median-blurred image (median) titled 'Median Blurring Filtered' using Matplotlib's imshow function.
 
-### Step5:
-Print the output images
+### Step5
+Define a Laplacian kernel (kernel3) and perform 2D convolution filtering on the RGB image (image2).Display the resulting filtered image (image5) titled 'Laplacian Kernel' using Matplotlib's imshow function.
 
+### step 6
+Apply the Laplacian operator to the RGB image (image2) using OpenCV's cv2.Laplacian function.Display the resulting image (new_image) titled 'Laplacian Operator' using Matplotlib's imshow function.
  
+
 ## Program:
-Name: AFSAR JUMAIL S
-Reg No: 212222240004
- ```
+### Developed By   : AFSAR JUMAIL S
+### Register Number: 212222240004
+
+### 1. Smoothing Filters
+
+i) Using Averaging Filter
+```Python
 import cv2
 import numpy as np
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
+image1 = cv2.imread('kitten.jpg')
+image2 = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
 
-#to read the color image
-input_image_path='shiba.jpg'
-color_image=cv2.imread(input_image_path)
+kernel = np.ones((11,11), np. float32)/121
+image3 = cv2.filter2D(image2, -1, kernel)
 
-#convert the color image to grayscale
-gray_image=cv2.cvtColor(color_image,cv2.COLOR_BGR2GRAY)
+plt.figure(figsize=(9,9))
+plt.subplot(1,2,1)
+plt.imshow(image2)
+plt.title('Orignal')
+plt.axis('off')
 
-#perform edge detection using Canny
-edges=cv2.Canny(gray_image,100,200)
+plt.subplot(1,2,2)
+plt.imshow(image3)
+plt.title('Filtered')
+plt.axis('off')
 
-#define the kernel size for erosion and dilation
-kernel_size=5
-kernel=np.ones((kernel_size,kernel_size),np.uint8)
 
-#perform erosion
-erosion=cv2.erode(edges,kernel,iterations=1)
 
-#perform dilation
-dilation=cv2.dilate(edges,kernel,iterations=1)
+```
+ii) Using Weighted Averaging Filter
+```Python
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+image1 = cv2.imread('kitten.jpg')
+image2 = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
 
-#display all images
-plt.figure(figsize=(15,10))
+kernel2 = np.array([[1,2,1],[2,4,2],[1,2,1]])/16
+image4 = cv2.filter2D(image2, -1, kernel2)
+plt.imshow(image4)
+plt.title('Weighted Averaging Filtered')
 
-plt.subplot(2,3,1)
-plt.imshow(cv2.cvtColor(color_image,cv2.COLOR_BGR2RGB))
-plt.title('Original Color Image')
-plt.axis('on')
 
-plt.subplot(2,3,2)
-plt.imshow(gray_image,cmap='gray')
-plt.title('Black and White Image')
-plt.axis('on')
 
-plt.subplot(2,3,3)
-plt.imshow(edges,cmap='gray')
-plt.title('Edge Segmentation')
-plt.axis('on')
 
-plt.subplot(2,3,4)
-plt.imshow(erosion,cmap='gray')
-plt.title('Erosion')
-plt.axis('on')
+```
+iii) Using Gaussian Filter
+```Python
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+image1 = cv2.imread('kitten.jpg')
+image2 = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
 
-plt.subplot(2,3,5)
-plt.imshow(dilation,cmap='gray')
-plt.title('Dilation')
-plt.axis('on')
+gaussian_blur = cv2.GaussianBlur(src=image2, ksize=(11,11), sigmaX=0, sigmaY=0)
+plt.imshow(gaussian_blur)
+plt.title(' Gaussian Blurring Filtered')
 
-plt.show()
+
+
+
 ```
 
-## Output:
+iv) Using Median Filter
+```Python
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+image1 = cv2.imread('kitten.jpg')
+image2 = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
 
-### Display the input Image
-![image](https://github.com/Afsarjumail/Implementation-of-filter/assets/118343395/b90ae503-3c5b-46fc-9d8f-ddb59878dead)
-
-
-### Display the Eroded Image
-![image](https://github.com/Afsarjumail/Implementation-of-filter/assets/118343395/8d5f48f8-9aaa-41f3-bc6f-8946968ff3c1)
-
-
-### Display the Dilated Image
-![image](https://github.com/Afsarjumail/Implementation-of-filter/assets/118343395/1b88ce64-1e63-4b76-922c-1a42aa095e3e)
-
-### Final Output
-![image](https://github.com/Afsarjumail/Implementation-of-filter/assets/118343395/1adaec81-1820-4fb3-ae83-8884df55ec83)
+median=cv2.medianBlur (src=image2, ksize=11)
+plt.imshow(median)
+plt.title(' Median Blurring Filtered')
 
 
-## Result
-Thus the generated text image is eroded and dilated using python and OpenCV.
+```
+
+### 2. Sharpening Filters
+i) Using Laplacian Kernal
+```Python
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+image1 = cv2.imread('kitten.jpg')
+image2 = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
+
+kernel3 = np.array([[0,1,0], [1, -4,1],[0,1,0]])
+image5 =cv2.filter2D(image2, -1, kernel3)
+plt.imshow(image5)
+plt.title('Laplacian Kernel')
+
+
+
+
+```
+ii) Using Laplacian Operator
+```Python
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+image1 = cv2.imread('kitten.jpg')
+image2 = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
+
+new_image = cv2.Laplacian (image2, cv2.CV_64F)
+plt.imshow(new_image)
+plt.title('Laplacian Operator')
+
+
+
+```
+
+## OUTPUT:
+### 1. Smoothing Filters
+
+
+i) Using Averaging Filter
+
+
+![image](https://github.com/arshatha-palanivel/Implementation-of-filter/assets/118682484/c70d602f-c3f5-4d95-9c43-74404a58046f)
+
+
+ii) Using Weighted Averaging Filter
+
+
+![image](https://github.com/arshatha-palanivel/Implementation-of-filter/assets/118682484/3d3344f1-c8ad-4134-9003-4cc1730edb62)
+
+
+
+iii) Using Gaussian Filter
+
+
+![image](https://github.com/arshatha-palanivel/Implementation-of-filter/assets/118682484/ab119390-c3f8-44a5-91f3-c333b0a647f4)
+
+
+
+iv) Using Median Filter
+
+
+![image](https://github.com/arshatha-palanivel/Implementation-of-filter/assets/118682484/fc16ce8e-32e2-48be-ab7f-67d188511fd5)
+
+
+
+### 2. Sharpening Filters
+
+
+i) Using Laplacian Kernal
+
+
+![image](https://github.com/arshatha-palanivel/Implementation-of-filter/assets/118682484/d2455169-2862-48af-9f39-907597d9fd60)
+
+
+ii) Using Laplacian Operator
+
+
+![image](https://github.com/arshatha-palanivel/Implementation-of-filter/assets/118682484/cc43a4be-8f06-4ff9-8db1-73560f82d775)
+
+
+
+## Result:
+Thus the filters are designed for smoothing and sharpening the images in the spatial domain.
